@@ -21,6 +21,7 @@
 #include <stdint.h>
 #include <stdarg.h>
 
+/* test for variable paraments */
 std::string Write(const std::string& strFile,
 				const std::string& strFunction,
 				const uint32_t dwLine,
