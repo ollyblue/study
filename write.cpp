@@ -63,3 +63,4 @@ std::string Write(const std::string& strFile,
 	strRes = szBuff;
 	return strRes;
 }
+
