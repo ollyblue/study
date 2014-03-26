@@ -55,9 +55,118 @@ void PList(Node *head)
   Node* p = head->next;
   while(p)
   {
-    printf("%d ", p->d);
+    printf("%d \tp:%016lX \n", p->d, reinterpret_cast<uint64_t>(p));
     p = p->next;
   }
+}
+
+void MakeCircle(Node* head)
+{
+  Node* p = head->next;
+  while(p->next)
+  {
+    p = p->next;
+  }
+  p->next = head;
+}
+
+Node* GetNode(Node* head, int pos)
+{
+  Node* p = head->next;
+  while( pos-- && p )
+  {
+    p = p->next;
+  }
+  return p;
+}
+
+
+int CheckCircle(Node* head)
+{
+  Node* p = head->next;
+  Node* q = head->next;
+  if( q )
+  {
+    q = q->next;
+  }
+  int i = 0;
+  while( p && p->next && q && q->next )
+  {
+    // printf("\n p:%016lX q:%016lX\n", reinterpret_cast<uint64_t>(p), reinterpret_cast<uint64_t>(q));
+    if( p == q )
+    {
+      return i;
+    }
+    // printf("i:%d v:%d\n",i, p->d);
+    p = p->next;
+    q = q->next;
+    if( q )
+    {
+      q = q->next;
+    }
+    // printf("\n aa p:%016lX q:%016lX\n", reinterpret_cast<uint64_t>(p), reinterpret_cast<uint64_t>(q));
+    i++;
+  }
+  return 0;
+}
+
+// ret greater than 0 has intersection
+int CheckUnion(Node* head1, Node* head2)
+{
+  if( head1 == head2 )
+  {
+    return 1;
+  }
+  int ret1 = CheckCircle(head1);
+  int ret2 = CheckCircle(head2);
+  Node* p = head1->next;
+  Node* q = head2->next;
+
+  printf("ret1:%d ret2:%d\n", ret1, ret2);
+  if( ret1 > 0 )
+  {
+    if( 0 == ret2 ) // 如果一个有环，另一个没环，则两个链表不可能相交
+    {
+      return -1;
+    }
+    if( ret2 > 0 ) // 两个都有环,则在大环前进 2*ret 之前如果有两同的指针，即相交，否则两个环不相交
+    {
+      int ret = ret1 > ret2 ? ret1 : ret2;
+      while(ret-- && q && p)
+      {
+        q = q->next;
+        if( q )
+        {
+          q = q->next;
+        }
+        p = p->next;
+        printf("\n p:%016lX q:%016lX\n", reinterpret_cast<uint64_t>(p), reinterpret_cast<uint64_t>(q));
+        if( p == q )
+        {
+          return 1;
+        }
+      }
+      return 0; // 不相交 
+    }
+  }
+
+  // 两人个链表都没有环，则循环遍历即可
+  p = head1->next;
+  while( p && q )
+  {
+    while( q )
+    {
+      printf("\n p:%016lX q:%016lX\n", reinterpret_cast<uint64_t>(p), reinterpret_cast<uint64_t>(q));
+      if( p == q )
+      {
+        return 1;
+      }
+      q = q->next;
+    }
+    q = head2->next;
+    p = p->next;
+  }
+  return 0;
 }
 
 int InsertList(Node* head, int iValue, size_t dwPos = 0)
