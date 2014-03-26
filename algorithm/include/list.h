@@ -150,7 +150,7 @@ int CheckUnion(Node* head1, Node* head2)
     }
   }
 
-  // 两人个链表都没有环，则循环遍历即可
+  // 两个链表都没有环，则循环遍历即可
   p = head1->next;
   while( p && q )
   {
@@ -165,6 +165,21 @@ int CheckUnion(Node* head1, Node* head2)
     }
     q = head2->next;
     p = p->next;
+  }
+  //  还要再遍历一次
+  q = head2->next;
+  while( q && p )
+  {
+    while(p)
+    {
+      if( p == q )
+      {
+        return 1;
+      }
+      p = p->next;
+    }
+    p = head1->next;
+    q = q->next;
   }
   return 0;
 }
