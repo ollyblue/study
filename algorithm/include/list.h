@@ -223,4 +223,17 @@ int FindInList(Node* head, int key)
   return pos;
 }
 
+void ReserveList(Node* head)
+{
+  //  就是头结点不变，后面的结点依次交换
+  Node* p = head->next;
+  while( p->next != NULL )
+  {
+    Node* tmp = p->next;
+    p->next = tmp->next;
+    tmp->next = head->next;
+    head->next = tmp;
+  }
+}
+
 #endif // !_ALGO_LIST_H

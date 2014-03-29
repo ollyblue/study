@@ -38,6 +38,11 @@ int main(int argc, const char *argv[])
   printf("\n\n");
   PListRecurse(head->next);
 
+  printf("\nreserve list:\n");
+  ReserveList(head);
+  PList(head);
+  printf("\n---- reserve list\n");
+
   Node* p = GetNode(head, 1);
   if( NULL != p )
   {
