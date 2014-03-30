@@ -68,12 +68,23 @@ int QuickSort(int arr[], size_t lo, size_t hi)
     while(i < j )
     {
       // 这里如果不加j>1的话，会溢出，然后产生core
-      while( j > i && j > 1  && arr[j] > nTemp ) j--;
+      while( j > i && j > 1  && arr[j] > nTemp ) 
+      {
+        j--;
+      }
+
       if( i < j )
-      arr[i++] = arr[j];
-      while( i < j && arr[i] < nTemp ) i++;
+      {
+        arr[i++] = arr[j];
+      }
+      while( i < j && arr[i] < nTemp ) 
+      {
+        i++;
+      }
       if( i < j )
-      arr[j] = arr[i];
+      {
+        arr[j] = arr[i];
+      }
     }
     arr[i] = nTemp;
     QuickSort(arr, lo, i - 1);
