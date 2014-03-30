@@ -66,15 +66,21 @@ void TestQuickSort(int arr[], size_t lo, size_t hi)
   PArr(arr, hi - lo + 1);
 }
 
+void TestMergeSort(int arr[], size_t lo, size_t hi)
+{
+  int *tempArr = new int[hi - lo + 1];
+  PArr(arr, hi - lo + 1);
+  MergeSort(arr, tempArr, lo, hi);
+  PArr(arr, hi - lo + 1);
+}
+
 int main(int argc, const char *argv[])
 {
-  int arr[] = { 4, 9, 1, 3, 100, 20, 60 ,11};
-  size_t len = sizeof(arr) / sizeof(arr[0]);
+// int arr[] = { 4, 9, 1, 3, 100, 20, 60 ,11};
   int *pLargeArr;
-  size_t dwLargeArrLen = 100000000;
+  size_t dwLargeArrLen = 10;
   GenerateArr(pLargeArr, dwLargeArrLen);
 
-//  TestQuickSort(arr, 0, len -1);
 
   if( argc > 1)
   {
@@ -90,6 +96,10 @@ int main(int argc, const char *argv[])
     if( strncmp(pSort,"-quick",sizeof("-quick")) == 0 )
     {
       TestQuickSort(pLargeArr, 0, dwLargeArrLen - 1);
+    }
+    if( strncmp(pSort,"-merge",sizeof("-merge")) == 0 )
+    {
+      TestMergeSort(pLargeArr, 0, dwLargeArrLen - 1);
     }
   }
   
