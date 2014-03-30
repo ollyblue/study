@@ -93,5 +93,4 @@ int QuickSort(int arr[], size_t lo, size_t hi)
   return 0;
 }
 
-
 #endif // !_ALGO_SORT_H
