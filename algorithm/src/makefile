@@ -1,5 +1,5 @@
 
-BINS		:=list
+BINS		:=list sort
 INCLUDE		:=-I../
 CXX			:=g++
 CFLAGS		:=-g -Wall
