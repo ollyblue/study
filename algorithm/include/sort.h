@@ -96,63 +96,71 @@ int QuickSort(int arr[], size_t lo, size_t hi)
 
 int Merge(int arr[], int tempArr[], size_t lo, size_t hi, size_t middle)
 {
-  size_t index1 = lo;
-  size_t index2 = middle + 1;
-  size_t index = lo;
-  for(size_t i = lo; i <= hi; ++i)
-  {
-    tempArr[i] = arr[i];
-  }
-  for(size_t i = lo; i <= hi; ++i)
-  {
-    printf("tempArr[%zu]:%d\n", i, tempArr[i]);
-  }
+  size_t k = 0;
+  size_t i = lo;
+  size_t j = middle;
 
-  while( (index1 <= middle) && 
-        (index2 <= hi) )
+  while( i < middle && j < hi )
   {
-    printf("i1:%zu i2:%zu m:%zu hi:%zu\n", index1, index2, middle, hi);
-    printf("tempArr[index1]:%d tempArr[index2]:%d\n", tempArr[index1], tempArr[index2]);
-    if( tempArr[index1] > tempArr[index2] )
+    if( arr[i] > arr[j] )
     {
-      printf("a i1:%zu i2:%zu m:%zu\n", index1, index2, middle);
-      printf("a tempArr[index1]:%d tempArr[index2]:%d\n", tempArr[index1], tempArr[index2]);
-      arr[index++] = tempArr[index2++];
+      tempArr[k++] = arr[j++];
     }
     else
     {
-      printf("b i1:%zu i2:%zu m:%zu hi:%zu\n", index1, index2, middle, hi);
-      printf("b tempArr[index1]:%d tempArr[index2]:%d\n", tempArr[index1], tempArr[index2]);
-      arr[index++] = tempArr[index1++];
-      printf("c i1:%zu i2:%zu m:%zu\n", index1, index2, middle);
-      printf("c tempArr[index1]:%d tempArr[index2]:%d\n", tempArr[index1], tempArr[index2]);
+      tempArr[k++] = arr[i++];
     }
-    printf("d i1:%zu i2:%zu m:%zu\n", index1, index2, middle);
-    printf("d tempArr[index1]:%d tempArr[index2]:%d\n", tempArr[index1], tempArr[index2]);
   }
 
-  while(index1 <= middle)
+  while( i < middle )
   {
-    arr[index++] = tempArr[index1++];
+    tempArr[k++] = arr[i++];
   }
-  while(index2 <= hi )
+  while( j < hi )
   {
-    arr[index++] = tempArr[index2++];
+    tempArr[k++] = arr[j++];
   }
+
+  for(size_t m = 0; m < k; ++m)
+  {
+    arr[ lo + m ] = tempArr[m];
+  }
+
   return 0;
 }
 
 int MergeSort(int arr[], int tmpArr[], size_t lo, size_t hi)
 {
-  while(lo < hi)
+  if(lo + 1 < hi)
   {
     size_t middle = ( lo + hi ) / 2;
-    if( middle < 1 ) return 0;
     MergeSort(arr, tmpArr, lo, middle);
-    MergeSort(arr, tmpArr, middle + 1, hi);
-    Merge(arr, tmpArr, lo, hi, middle + 1);
+    MergeSort(arr, tmpArr, middle, hi);
+    Merge(arr, tmpArr, lo, hi, middle);
   }
   return 0;
+}
+
+void ShellSort(int arr[], int dwLargeArrLen)
+{
+  int temp;
+  int n = dwLargeArrLen / 2 ;
+  int index = 0;
+  while( n  >= 1 )
+  {
+    for(index = n; index < (int)dwLargeArrLen; ++index)
+    {
+      temp = arr[index];
+      int j = index - n;
+      while( j >= 0 && arr[j] > temp )
+      {
+        arr[j + n] = arr[index];
+        j = j - n;
+      }
+      arr[j + n] = temp;
+    }
+    n /= 2;
+  }
 }
 
 #endif // !_ALGO_SORT_H

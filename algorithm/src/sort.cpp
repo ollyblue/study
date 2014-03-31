@@ -50,7 +50,7 @@ void TestInsertSort(int arr[], size_t len)
 int GenerateArr(int* &arr, size_t len)
 {
   arr = new int[len];
-  const uint32_t RAND_DEF = 100000000;
+  const uint32_t RAND_DEF = static_cast<uint32_t>(-1);
   srand(time(NULL));
   for(size_t i = 0; i < len; ++i)
   {
@@ -61,24 +61,33 @@ int GenerateArr(int* &arr, size_t len)
 
 void TestQuickSort(int arr[], size_t lo, size_t hi)
 {
-  PArr(arr, hi - lo + 1);
+  //PArr(arr, hi - lo + 1);
   QuickSort(arr, lo, hi);
-  PArr(arr, hi - lo + 1);
+  //PArr(arr, hi - lo + 1);
 }
 
 void TestMergeSort(int arr[], size_t lo, size_t hi)
 {
-  int *tempArr = new int[hi - lo + 1];
-  PArr(arr, hi - lo + 1);
+  int *tempArr = new int[hi - lo];
+ // PArr(arr, hi - lo);
   MergeSort(arr, tempArr, lo, hi);
-  PArr(arr, hi - lo + 1);
+//  printf("\nafter merge sort:\n");
+  //PArr(arr, hi - lo);
+  delete []tempArr;
+}
+
+void TestShellSort(int arr[], int dwLargeArrLen)
+{
+//   PArr(arr, dwLargeArrLen);
+  ShellSort(arr, dwLargeArrLen);
+  // PArr(arr, dwLargeArrLen);
 }
 
 int main(int argc, const char *argv[])
 {
 // int arr[] = { 4, 9, 1, 3, 100, 20, 60 ,11};
   int *pLargeArr;
-  size_t dwLargeArrLen = 10;
+  size_t dwLargeArrLen = 10000000;
   GenerateArr(pLargeArr, dwLargeArrLen);
 
 
@@ -99,7 +108,11 @@ int main(int argc, const char *argv[])
     }
     if( strncmp(pSort,"-merge",sizeof("-merge")) == 0 )
     {
-      TestMergeSort(pLargeArr, 0, dwLargeArrLen - 1);
+      TestMergeSort(pLargeArr, 0, dwLargeArrLen);
+    }
+    if( strncmp(pSort,"-shell",sizeof("-shell")) == 0 )
+    {
+      TestShellSort(pLargeArr, dwLargeArrLen);
     }
   }
   
