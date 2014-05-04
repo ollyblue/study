@@ -83,13 +83,30 @@ void TestShellSort(int arr[], int dwLargeArrLen)
   // PArr(arr, dwLargeArrLen);
 }
 
+void Test4Def()
+{
+#define _TT 3 
+#define _CC 0
+#define _MM 1
+#if _TT > 2 
+  printf("TT > 2\n");
+#endif
+
+#if _TT > 2 || ( _MM && !_CC )
+  printf("TT > 2 || ( _MM && !_CC )\n");
+#endif
+}
+
 int main(int argc, const char *argv[])
 {
 // int arr[] = { 4, 9, 1, 3, 100, 20, 60 ,11};
   int *pLargeArr;
-  size_t dwLargeArrLen = 10000000;
+  size_t dwLargeArrLen = 100000000;
   GenerateArr(pLargeArr, dwLargeArrLen);
 
+  clock_t begin = clock();
+
+  Test4Def();
 
   if( argc > 1)
   {
@@ -115,6 +132,10 @@ int main(int argc, const char *argv[])
       TestShellSort(pLargeArr, dwLargeArrLen);
     }
   }
+
+  clock_t end = clock();
+  clock_t cost = end - begin;
+  printf("cost time:%lf\n", (double)cost / CLOCKS_PER_SEC);
   
   return 0;
 }
