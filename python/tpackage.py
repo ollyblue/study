@@ -259,7 +259,7 @@ class tunpack:
 	'''string include one byte size'''
 	def get_cstr(self):
 		if self.s_len - self.done_len >= 1:
-			fmt = "%sB" % ( self.endian == True and "!" or "", size )
+			fmt = "%sB" % ( self.endian == True and "!" or "" )
 			size = 1
 			s = "".join(self.s[self.done_len:self.done_len+size])
 			str_len, = struct.unpack(fmt, s)
@@ -275,7 +275,7 @@ class tunpack:
 	'''string include tow byte size'''
 	def get_wstr(self):
 		if self.s_len - self.done_len >= 2:
-			fmt = "%sB" % ( self.endian == True and "!" or "", size )
+			fmt = "%sH" % ( self.endian == True and "!" or "" )
 			size = 2
 			s = "".join(self.s[self.done_len:self.done_len+size])
 			str_len, = struct.unpack(fmt, s)
