@@ -112,6 +112,14 @@ class tpack:
 		self.s.extend(pack)
 		self.len += 4
 		self.len += len
+	def add_str_by_len(self, s, len):
+		fmt = "%s%ds" % (self.endian == True and "!" or "", len)
+		pack = struct.pack(fmt, s)
+		self.s.extend(pack)
+		self.len += len
+	
+	def get_pack(self):
+		return self.s
 		
 	def printf(self):
 		print(self.s)
@@ -143,6 +151,142 @@ class tpack:
 		print(binascii.b2a_hex(''.join(self.s)))
 		print("end ascii")
 
+class tunpack:
+	def __init__(self, s, s_len, endian = True):
+		self.s = s
+		self.s_len = s_len
+		self.endian = endian
+		self.done_len  = 0
+	
+	def get_char(self):
+		if self.s_len - self.done_len >= 1:
+			fmt = "%sb" % ( self.endian == True and "!" or "" )
+			v, = struct.unpack_from(fmt, self.s[0], 0)
+			self.done_len += 1
+			return v
+		raise IndexError('out of range')
+
+	def get_uchar(self):
+		if self.s_len - self.done_len >= 1:
+			fmt = "%sB" % ( self.endian == True and "!" or "" )
+			v, = struct.unpack_from(fmt, self.s[0], 0)
+			self.done_len += 1
+			return v
+		raise IndexError('out of range')
+
+	def get_short(self):
+		if self.s_len - self.done_len >= 2:
+			fmt = "%sh" % ( self.endian == True and "!" or "" )
+			s = "".join(self.s[self.done_len:self.done_len+2])
+			v, = struct.unpack(fmt,s)
+			self.done_len += 2
+			return v
+		raise IndexError('out of range')
+
+	def get_ushort(self):
+		if self.s_len - self.done_len >= 2:
+			fmt = "%sH" % ( self.endian == True and "!" or "" )
+			s = "".join(self.s[self.done_len:self.done_len+2])
+			v, = struct.unpack(fmt,s)
+			self.done_len += 2
+			return v
+		raise IndexError('out of range')
+
+	def get_int(self):
+		if self.s_len - self.done_len >= 2:
+			fmt = "%si" % ( self.endian == True and "!" or "" )
+			s = "".join(self.s[self.done_len:self.done_len+4])
+			v, = struct.unpack(fmt,s)
+			self.done_len += 4
+			return v
+		raise IndexError('out of range')
+
+	def get_uint(self):
+		if self.s_len - self.done_len >= 2:
+			fmt = "%sI" % ( self.endian == True and "!" or "" )
+			s = "".join(self.s[self.done_len:self.done_len+4])
+			v, = struct.unpack(fmt,s)
+			self.done_len += 4
+			return v
+		raise IndexError('out of range')
+
+	def get_longlong(self):
+		if self.s_len - self.done_len >= 8:
+			fmt = "%sq" % ( self.endian == True and "!" or "" )
+			s = "".join(self.s[self.done_len:self.done_len+8])
+			v, = struct.unpack(fmt, s)
+			self.done_len += 8
+			return v
+		raise IndexError('out of range')
+
+	def get_ulonglong(self):
+		if self.s_len - self.done_len >= 8:
+			fmt = "%sQ" % ( self.endian == True and "!" or "" )
+			s = "".join(self.s[self.done_len:self.done_len+8])
+			v, = struct.unpack(fmt, s)
+			self.done_len += 8
+			return v
+		raise IndexError('out of range')
+
+	def get_float(self):
+		if self.s_len - self.done_len >= 8:
+			fmt = "%sf" % ( self.endian == True and "!" or "" )
+			s = "".join(self.s[self.done_len:self.done_len+4])
+			v, = struct.unpack(fmt, s)
+			self.done_len += 4
+			return v
+		raise IndexError('out of range')
+
+	def get_double(self):
+		if self.s_len - self.done_len >= 8:
+			fmt = "%sF" % ( self.endian == True and "!" or "" )
+			s = "".join(self.s[self.done_len:self.done_len+8])
+			v, = struct.unpack(fmt, s)
+			self.done_len += 8
+			return v
+		raise IndexError('out of range')
+
+	''' string not include size'''
+	def get_str(self,size):
+		if self.s_len - self.done_len >= size:
+			fmt = "%s%ds" % ( self.endian == True and "!" or "", size )
+			s = "".join(self.s[self.done_len:self.done_len+size])
+			v, = struct.unpack(fmt, s)
+			self.done_len += size
+			return v
+		raise IndexError('out of range')
+
+	'''string include one byte size'''
+	def get_cstr(self):
+		if self.s_len - self.done_len >= 1:
+			fmt = "%sB" % ( self.endian == True and "!" or "", size )
+			size = 1
+			s = "".join(self.s[self.done_len:self.done_len+size])
+			str_len, = struct.unpack(fmt, s)
+			if self.s_len - self.done_len >= str_len:
+				fmt = "%s%ds" % ( self.endian == True and "!" or "", size, str_len )
+				self.done_len += size
+				size = str_len
+				s = "".join(self.s[self.done_len:self.done_len+size])
+				str, = struct.unpack(fmt, s)
+				return str_len,str
+		raise IndexError('out of range')
+
+	'''string include tow byte size'''
+	def get_wstr(self):
+		if self.s_len - self.done_len >= 2:
+			fmt = "%sB" % ( self.endian == True and "!" or "", size )
+			size = 2
+			s = "".join(self.s[self.done_len:self.done_len+size])
+			str_len, = struct.unpack(fmt, s)
+			if self.s_len - self.done_len >= str_len:
+				fmt = "%s%ds" % ( self.endian == True and "!" or "", size, str_len )
+				self.done_len += size
+				size = str_len
+				s = "".join(self.s[self.done_len:self.done_len+size])
+				str, = struct.unpack(fmt, s)
+				return str_len,str
+		raise IndexError('out of range')
 
 if __name__ == "__main__":
 	t = tpack()
@@ -153,12 +297,23 @@ if __name__ == "__main__":
 	#t.add_longlong(12345678)
 	s = "test"
 
-	t.add_ushort(0x11FF)
-	t.add_ulonglong(0x11FF)
-	t.add_wstr(len(s), s)
+	t.add_char(1)
+	t.add_ushort(2335)
+	t.add_ulonglong(1112234)
+	str = "test"
+	t.add_str_by_len(str, len(str))
+	#t.add_wstr(len(s), s)
 	print("len:%d" % t.get_len())
 	#t.printf()
 	t.printhex()
+
+	ss = t.get_pack()
+	unt = tunpack(ss, len(ss) )
+	c = unt.get_char()
+	us = unt.get_ushort()
+	uv = unt.get_ulonglong()
+	vstr = unt.get_str(len(str))
+	print c,us,uv,vstr
 
 
 
