@@ -64,3 +64,4 @@ std::string Write(const std::string& strFile,
 	return strRes;
 }
 
+
